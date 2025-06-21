@@ -1,0 +1,81 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    int bt[10], prior[10], pno[10], wt[10], tat[10];
+
+    // Input burst time and priority
+    for (int i = 0; i < n; i++) {
+        pno[i] = i + 1;
+        cout << "Process " << pno[i] << ":\n";
+        cout << "Enter burst time: ";
+        cin >> bt[i];
+        cout << "Enter priority: ";
+        cin >> prior[i];
+    }
+
+    // Sort by priority (lower number = higher priority)
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (prior[i] > prior[j]) {
+                swap(prior[i], prior[j]);
+                swap(bt[i], bt[j]);
+                swap(pno[i], pno[j]);
+            }
+        }
+    }
+
+    // Calculate Waiting Time and Turnaround Time
+    wt[0] = 0;
+    tat[0] = bt[0];
+    int totalWT = wt[0], totalTAT = tat[0];
+
+    for (int i = 1; i < n; i++) {
+        wt[i] = wt[i - 1] + bt[i - 1];
+        tat[i] = wt[i] + bt[i];
+        totalWT += wt[i];
+        totalTAT += tat[i];
+    }
+
+    float avgWT = (float)totalWT / n;
+    float avgTAT = (float)totalTAT / n;
+
+    // Output the results
+    cout << "\nJob\tBT\tWT\tTAT\tPriority\n";
+    for (int i = 0; i < n; i++) {
+        cout << "P" << pno[i] << "\t" << bt[i] << "\t" << wt[i] << "\t" << tat[i] << "\t" << prior[i] << endl;
+    }
+
+    cout << "\nAverage Waiting Time: " << avgWT;
+    cout << "\nAverage Turnaround Time: " << avgTAT << endl;
+
+    return 0;
+}
+
+
+
+Output:
+Enter the number of processes: 3
+Process 1:
+Enter burst time: 10
+Enter priority: 2
+Process 2:
+Enter burst time: 5
+Enter priority: 1
+Process 3:
+Enter burst time: 8
+Enter priority: 3
+
+
+
+Job    BT    WT    TAT    Priority
+P2     5     0     5      1
+P1     10    5     15     2
+P3     8     15    23     3
+
+Average Waiting Time: 6.67
+Average Turnaround Time: 14.33
