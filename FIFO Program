@@ -1,0 +1,98 @@
+#include <iostream>
+#include <queue>
+#include <unordered_set>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    int n, pages[100], framesCount;
+
+    cout << "Enter number of pages: ";
+    cin >> n;
+
+    cout << "Enter page reference string:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> pages[i];
+    }
+
+    cout << "Enter number of frames: ";
+    cin >> framesCount;
+
+    unordered_set<int> frames;
+    queue<int> fifo;
+    int pageFaults = 0;
+
+    // Print table header
+    cout << "\nStep\tPage\tFrames\t\t\tPage Fault\n";
+    cout << "------------------------------------------------------\n";
+
+    for (int i = 0; i < n; i++) {
+        int page = pages[i];
+        string fault = "No";
+
+        // If page is not in memory
+        if (frames.find(page) == frames.end()) {
+            pageFaults++;
+            fault = "Yes";
+
+            // Remove the oldest if full
+            if (frames.size() == framesCount) {
+                int oldPage = fifo.front();
+                fifo.pop();
+                frames.erase(oldPage);
+            }
+
+            // Add the new page
+            frames.insert(page);
+            fifo.push(page);
+        }
+
+        // Print current step
+        cout << setw(4) << i + 1 << "\t" << setw(4) << page << "\t";
+
+        // Display frame contents
+        queue<int> temp = fifo;
+        vector<int> content;
+        while (!temp.empty()) {
+            content.push_back(temp.front());
+            temp.pop();
+        }
+
+        // Format frames with empty slots
+        for (int j = 0; j < framesCount; j++) {
+            if (j < content.size())
+                cout << content[j] << " ";
+            else
+                cout << "- ";
+        }
+
+        cout << "\t\t" << fault << endl;
+    }
+
+    cout << "\nTotal Page Faults: " << pageFaults << endl;
+
+    return 0;
+}
+
+
+
+
+
+Output:
+Enter number of pages: 8
+Enter page reference string:
+1 2 3 2 4 1 5 2
+Enter number of frames: 3
+
+Step	Page	Frames			Page Fault
+------------------------------------------------------
+   1	   1	1 - -			Yes
+   2	   2	1 2 -			Yes
+   3	   3	1 2 3			Yes
+   4	   2	1 2 3			No
+   5	   4	2 3 4			Yes
+   6	   1	3 4 1			Yes
+   7	   5	4 1 5			Yes
+   8	   2	1 5 2			Yes
+
+Total Page Faults: 7
