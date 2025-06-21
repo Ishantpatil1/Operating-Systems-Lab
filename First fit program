@@ -1,0 +1,63 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int blocks[10], processes[10];
+    int blockUsed[10] = {0}; // 0 means block is free
+    int blockCount, processCount;
+
+    // Input block sizes
+    cout << "Enter number of memory blocks: ";
+    cin >> blockCount;
+    cout << "Enter size of each block:\n";
+    for (int i = 0; i < blockCount; i++) {
+        cout << "Block " << i + 1 << ": ";
+        cin >> blocks[i];
+    }
+
+    // Input process sizes
+    cout << "\nEnter number of processes: ";
+    cin >> processCount;
+    cout << "Enter size of each process:\n";
+    for (int i = 0; i < processCount; i++) {
+        cout << "Process " << i + 1 << ": ";
+        cin >> processes[i];
+    }
+
+    // First Fit Allocation
+    cout << "\nProcess\tSize\tBlock Allocated\n";
+    for (int i = 0; i < processCount; i++) {
+        bool allocated = false;
+        for (int j = 0; j < blockCount; j++) {
+            if (!blockUsed[j] && blocks[j] >= processes[i]) {
+                blockUsed[j] = 1; // mark block as used
+                cout << "P" << i + 1 << "\t" << processes[i] << "\tBlock " << j + 1 << "\n";
+                allocated = true;
+                break;
+            }
+        }
+        if (!allocated) {
+            cout << "P" << i + 1 << "\t" << processes[i] << "\tNot Allocated\n";
+        }
+    }
+
+    return 0;
+}
+
+
+Output:
+Enter number of memory blocks: 2
+Enter size of each block:
+Block 1: 100
+Block 2: 200
+
+Enter number of processes: 3
+Enter size of each process:
+Process 1: 200
+Process 2: 100
+Process 3: 300
+
+Process	Size	Block Allocated
+P1	200	Block 2
+P2	100	Block 1
+P3	300	Not Allocated
