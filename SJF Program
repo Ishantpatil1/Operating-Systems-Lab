@@ -1,0 +1,103 @@
+ #include <iostream>
+using namespace std;
+
+struct Process {
+    int pid;
+    int arrival;
+    int burst;
+    int completion;
+    int turnaround;
+    int waiting;
+};
+
+int main() {
+    int n;
+    cout << "Enter number of processes: ";
+    cin >> n;
+
+    Process p[n];
+
+    // Input: Arrival and Burst Times
+    for (int i = 0; i < n; i++) {
+        p[i].pid = i + 1;
+        cout << "Enter arrival time and burst time for process P" << p[i].pid << ": ";
+        cin >> p[i].arrival >> p[i].burst;
+    }
+
+    // Sorting by arrival time first, then burst time (SJF logic)
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (p[i].arrival > p[j].arrival || 
+               (p[i].arrival == p[j].arrival && p[i].burst > p[j].burst)) {
+                swap(p[i], p[j]);
+            }
+        }
+    }
+
+    int time = 0, completed = 0;
+    bool done[n] = {false};
+
+    while (completed < n) {
+        int idx = -1, minBurst = 9999;
+
+        for (int i = 0; i < n; i++) {
+            if (!done[i] && p[i].arrival <= time && p[i].burst < minBurst) {
+                minBurst = p[i].burst;
+                idx = i;
+            }
+        }
+
+        if (idx != -1) {
+            time += p[idx].burst;
+            p[idx].completion = time;
+            p[idx].turnaround = p[idx].completion - p[idx].arrival;
+            p[idx].waiting = p[idx].turnaround - p[idx].burst;
+            done[idx] = true;
+            completed++;
+        } else {
+            time++; // idle time
+        }
+    }
+
+    float totalTAT = 0, totalWT = 0;
+
+    cout << "\nPID\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n";
+    for (int i = 0; i < n; i++) {
+        cout << "P" << p[i].pid << "\t"
+             << p[i].arrival << "\t"
+             << p[i].burst << "\t"
+             << p[i].completion << "\t\t"
+             << p[i].turnaround << "\t\t"
+             << p[i].waiting << endl;
+
+        totalTAT += p[i].turnaround;
+        totalWT += p[i].waiting;
+    }
+
+    cout << "\nAverage Turnaround Time: " << totalTAT / n;
+    cout << "\nAverage Waiting Time: " << totalWT / n << endl;
+
+    return 0;
+}
+
+
+
+
+
+Output:
+Enter number of processes: 4
+Enter arrival time and burst time for process P1: 0 7
+Enter arrival time and burst time for process P2: 2 4
+Enter arrival time and burst time for process P3: 4 1
+Enter arrival time and burst time for process P4: 5 4
+
+
+
+PID	Arrival	Burst	Completion	Turnaround	Waiting
+P1	0	7	7		7		0
+P2	2	4	11		9		5
+P3	4	1	8		4		3
+P4	5	4	15		10		6
+
+Average Turnaround Time: 7.5
+Average Waiting Time: 3.5
