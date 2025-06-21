@@ -1,0 +1,108 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    int n, capacity;
+    cout << "Enter number of pages: ";
+    cin >> n;
+
+    vector<int> pages(n);
+    cout << "Enter page reference string:\n";
+    for (int i = 0; i < n; i++)
+        cin >> pages[i];
+
+    cout << "Enter number of frames: ";
+    cin >> capacity;
+
+    vector<int> frames;
+    unordered_map<int, int> recent; // page → recent use index
+    int faults = 0;
+
+    cout << "\nPage\tFrames\t\tPage Fault\n";
+    cout << "------------------------------------\n";
+
+    for (int i = 0; i < n; i++) {
+        int page = pages[i];
+        bool fault = false;
+
+        // Check if page is in frames
+        bool found = false;
+        for (int f : frames) {
+            if (f == page) {
+                found = true;
+                break;
+            }
+        }
+
+        // Page not found: page fault
+        if (!found) {
+            faults++;
+            fault = true;
+
+            // If frame is full, remove LRU
+            if (frames.size() == capacity) {
+                int lruPage = frames[0], lruIndex = recent[lruPage];
+                for (int f : frames) {
+                    if (recent[f] < lruIndex) {
+                        lruPage = f;
+                        lruIndex = recent[f];
+                    }
+                }
+                // Remove LRU
+                for (int j = 0; j < frames.size(); j++) {
+                    if (frames[j] == lruPage) {
+                        frames[j] = page;
+                        break;
+                    }
+                }
+            } else {
+                frames.push_back(page);
+            }
+        }
+
+        // Update recent usage
+        recent[page] = i;
+
+        // Print frame state
+        cout << page << "\t";
+        for (int f : frames)
+            cout << f << " ";
+        if (frames.size() < capacity)
+            for (int k = 0; k < capacity - frames.size(); k++)
+                cout << "- ";
+        cout << "\t\t" << (fault ? "Yes" : "No") << endl;
+    }
+
+    cout << "\nTotal Page Faults: " << faults << endl;
+
+    return 0;
+}
+
+Output:
+Enter number of pages: 10
+Enter page reference string:
+7 0 1 2 0 3 0 4 2 3
+Enter number of frames: 3
+
+
+
+
+
+
+
+Page	Frames		Page Fault
+------------------------------------
+7	7 - -		Yes
+0	7 0 -		Yes
+1	7 0 1		Yes
+2	0 1 2		Yes
+0	0 1 2		No
+3	1 2 3		Yes
+0	2 3 0		Yes
+4	3 0 4		Yes
+2	0 4 2		Yes
+3	4 2 3		Yes
+
+Total Page Faults: 9
