@@ -1,0 +1,56 @@
+📂 1. ls – List Files
+•	Use: Show files and folders in the current directory.
+•	Example:
+ls
+Shows: file1.txt myfolder script.sh
+________________________________________
+📁 2. cd – Change Directory
+•	Use: Move into another folder (directory).
+•	Example:
+cd myfolder
+________________________________________
+📄 3. touch – Create a New File
+•	Use: Create an empty file.
+•	Example:
+touch newfile.txt
+________________________________________
+📝 4. cat – View or Combine Files
+•	Use: Show file content, or combine files.
+•	Example:
+cat file.txt
+________________________________________
+🛠️ 5. mkdir – Make Directory
+•	Use: Create a new folder.
+•	Example:
+mkdir myfolder
+________________________________________
+❌ 6. rm – Remove Files or Folders
+•	Use: Delete files or folders.
+•	Example:
+rm file.txt
+rm -r myfolder  # for folders
+________________________________________
+✏️ 7. nano or vi – Edit Files
+•	Use: Open a text file in editor.
+•	Example:
+nano file.txt
+________________________________________
+🔍 8. grep – Search Text in Files
+•	Use: Search for a word inside files.
+•	Example:
+grep "main" program.c
+________________________________________
+📌 9. chmod – Change File Permissions
+•	Use: Give read/write/execute permissions.
+•	Example:
+chmod +x script.sh
+________________________________________
+🧾 10. ps – Show Running Processes
+•	Use: Show which programs are running.
+•	Example:
+ps
+________________________________________
+🔁 11. fork() – (System Call)
+•	Use in OS Lab: Create a new process.
+•	Example (C Code):
+fork();  // creates a child process
