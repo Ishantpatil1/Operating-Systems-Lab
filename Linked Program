@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int i, j, n;
+    string name[10];
+    int start[10], total[10], block[10][10];
+
+    cout << "Enter number of files: ";
+    cin >> n;
+
+    for (i = 0; i < n; i++) {
+        cout << "\nEnter file name: ";
+        cin >> name[i];
+        cout << "Enter start block: ";
+        cin >> start[i];
+        cout << "Enter number of blocks: ";
+        cin >> total[i];
+
+        cout << "Enter block numbers: ";
+        for (j = 0; j < total[i]; j++) {
+            cin >> block[i][j];
+        }
+    }
+
+    cout << "\nFile\tStart\tSize\tBlocks\n";
+    for (i = 0; i < n; i++) {
+        cout << name[i] << "\t" << start[i] << "\t" << total[i] << "\t";
+        for (j = 0; j < total[i]; j++) {
+            cout << block[i][j];
+            if (j != total[i] - 1)
+                cout << " -> ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+
+
+Output:
+Enter number of files: 1
+Enter file name: notes
+Enter start block: 2
+Enter number of blocks: 3
+Enter block numbers: 2 4 7
+
+File	Start	Size	Blocks
+notes	2	3	2 -> 4 -> 7
