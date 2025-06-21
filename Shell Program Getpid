@@ -1,0 +1,25 @@
+#include <iostream>
+#include <unistd.h>
+
+int main() {
+    std::cout << "Before fork - PID: " << getpid() << "\n";
+    pid_t pid = fork();
+
+    if (pid == 0)
+        std::cout << "Child process PID: " << getpid() << "\n";
+    else if (pid > 0)
+        std::cout << "Parent process PID: " << getpid() << "\n";
+    else
+        perror("fork failed");
+
+    return 0;
+}
+
+
+
+
+Output:
+Output:
+Before fork - PID: 408
+Parent process PID: 408
+Child process PID: 409
