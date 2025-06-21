@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+
+int buffer = 0;        // How many items in buffer
+int maxSize = 3;       // Buffer can hold up to 3 items
+
+void produce() {
+    if (buffer < maxSize) {
+        buffer++;
+        cout << "Producer added an item. Items in buffer: " << buffer << endl;
+    } else {
+        cout << "Buffer is full! Cannot produce.\n";
+    }
+}
+
+void consume() {
+    if (buffer > 0) {
+        cout << "Consumer removed an item. Item was number " << buffer << endl;
+        buffer--;
+    } else {
+        cout << "Buffer is empty! Cannot consume.\n";
+    }
+}
+
+int main() {
+    int choice;
+
+    while (true) {
+        cout << "\n1. Produce\n2. Consume\n3. Exit\nEnter your choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            produce();
+        } else if (choice == 2) {
+            consume();
+        } else if (choice == 3) {
+            cout << "Exiting program.\n";
+            break;
+        } else {
+            cout << "Invalid choice. Please enter 1, 2 or 3.\n";
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+
+Output:
+1. Produce
+2. Consume
+3. Exit
+Enter your choice: 1
+Producer added an item. 
+Items in buffer: 1
+
+Enter your choice: 1
+Producer added an item. Items in buffer: 2
+
+Enter your choice: 1
+Producer added an item. Items in buffer: 3
+
+Enter your choice: 1
+Buffer is full! Cannot produce.
+
+Enter your choice: 2
+Consumer removed an item. Item was number 3
+
+Enter your choice: 2
+Consumer removed an item. Item was number 2
+
+Enter your choice: 3
+Exiting program.
+
+
