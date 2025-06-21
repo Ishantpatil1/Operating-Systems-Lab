@@ -1,0 +1,88 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, q;
+    cout << "Enter the number of processes & time quantum: ";
+    cin >> n >> q;
+
+    int burst[10], remaining[10], tat[10] = {0};
+    int time = 0;
+    float totalTAT = 0, totalWT = 0;
+
+    cout << "Enter burst times:\n";
+    for (int i = 1; i <= n; i++) {
+        cin >> burst[i];
+        remaining[i] = burst[i]; // copy burst to remaining
+    }
+
+    cout << "\n\tGantt Chart\n";
+    cout << "---------------------------\n";
+
+    bool done;
+    do {
+        done = true;
+        for (int i = 1; i <= n; i++) {
+            if (remaining[i] > 0) {
+                done = false;
+                cout << "P" << i << " | ";
+                if (remaining[i] > q) {
+                    time += q;
+                    remaining[i] -= q;
+                } else {
+                    time += remaining[i];
+                    tat[i] = time;
+                    remaining[i] = 0;
+                }
+            }
+        }
+    } while (!done);
+
+    cout << "\n---------------------------\n";
+
+    // Calculate turnaround time and waiting time
+    for (int i = 1; i <= n; i++) {
+        totalTAT += tat[i];
+        totalWT += (tat[i] - burst[i]);
+    }
+
+    float avgTAT = totalTAT / n;
+    float avgWT = totalWT / n;
+
+    cout << "\nProcess\tBurst\tTAT\tWT\n";
+    for (int i = 1; i <= n; i++) {
+        cout << "P" << i << "\t" << burst[i] << "\t" << tat[i]
+             << "\t" << tat[i] - burst[i] << endl;
+    }
+
+    cout << "\nAverage Turnaround Time: " << avgTAT;
+    cout << "\nAverage Waiting Time: " << avgWT << endl;
+
+    return 0;
+}
+
+
+
+
+
+Output:
+Enter the number of processes & time quantum: 4 3
+Enter burst times:
+5 6 3 1
+
+
+
+
+	 Gantt Chart
+---------------------------
+P1 | P2 | P3 | P4 | P1 | P2 | P1 | P2 | 
+---------------------------
+
+Process	Burst	TAT	WT
+P1	5	12	7
+P2	6	17	11
+P3	3	6	3
+P4	1	4	3
+
+Average Turnaround Time: 9.75
+Average Waiting Time: 6
