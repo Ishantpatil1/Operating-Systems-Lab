@@ -1,0 +1,130 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int found, flag, l;
+    int p[10][10], c[10][10];
+    int totalProcesses, totalResources;
+    int i, j, k = 1;
+    int safeList[10], resource[10], available[10], temp[10];
+    int sum = 0;
+
+    cout << "Enter total number of processes: ";
+    cin >> totalProcesses;
+    cout << "Enter total number of resources: ";
+    cin >> totalResources;
+
+    // Input claim (maximum need) matrix
+    cout << "Enter claim (Max. Need) matrix:\n";
+    for (i = 1; i <= totalProcesses; i++) {
+        cout << "Process " << i << ":\n";
+        for (j = 1; j <= totalResources; j++) {
+            cin >> c[i][j];
+        }
+    }
+
+    // Input allocation matrix
+    cout << "Enter allocation matrix:\n";
+    for (i = 1; i <= totalProcesses; i++) {
+        cout << "Process " << i << ":\n";
+        for (j = 1; j <= totalResources; j++) {
+            cin >> p[i][j];
+        }
+    }
+
+    // Input total resource vector
+    cout << "Enter total resource vector:\n";
+    for (i = 1; i <= totalResources; i++) {
+        cin >> resource[i];
+    }
+
+    // Input available resource vector
+    cout << "Enter available resource vector:\n";
+    for (i = 1; i <= totalResources; i++) {
+        cin >> available[i];
+        temp[i] = available[i];
+    }
+
+    // Check for processes that already finished
+    for (i = 1; i <= totalProcesses; i++) {
+        sum = 0;
+        for (j = 1; j <= totalResources; j++) {
+            sum += p[i][j];
+        }
+        if (sum == 0) {
+            safeList[k] = i;
+            k++;
+        }
+    }
+
+    // Try to find safe sequence
+    for (i = 1; i <= totalProcesses; i++) {
+        for (l = 1; l < k; l++) {
+            if (i != safeList[l]) {
+                flag = 1;
+                for (j = 1; j <= totalResources; j++) {
+                    if (c[i][j] > temp[j]) {
+                        flag = 0;
+                        break;
+                    }
+                }
+                if (flag == 1) {
+                    safeList[k] = i;
+                    k++;
+                    for (j = 1; j <= totalResources; j++) {
+                        temp[j] += p[i][j];
+                    }
+                }
+            }
+        }
+    }
+
+    // Display deadlocked processes
+    cout << "Deadlock causing processes are: ";
+    for (j = 1; j <= totalProcesses; j++) {
+        found = 0;
+        for (i = 1; i < k; i++) {
+            if (j == safeList[i])
+                found = 1;
+        }
+        if (found == 0)
+            cout << j << "\t";
+    }
+
+    return 0;
+}
+
+
+
+
+
+Output:
+Enter total number of processes: 3
+Enter total number of resources: 3
+
+Enter claim (Max. Need) matrix:
+Process 1:
+7 5 3
+Process 2:
+3 2 2
+Process 3:
+9 0 2
+
+Enter allocation matrix:
+Process 1:
+0 1 0
+Process 2:
+2 0 0
+Process 3:
+3 0 2
+
+Enter total resource vector:
+10 5 7
+
+Enter available resource vector:
+3 3 2
+
+
+
+
+Deadlock causing processes are: 1	2	3	
