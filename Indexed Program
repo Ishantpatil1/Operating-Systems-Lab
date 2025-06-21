@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int files, i, j;
+    int index[10], size[10], data[10][10];
+
+    cout << "Enter number of files: ";
+    cin >> files;
+
+    for (i = 0; i < files; i++) {
+        cout << "\nFile " << i + 1 << ":\n";
+        cout << "Enter index block: ";
+        cin >> index[i];
+        cout << "Enter number of blocks: ";
+        cin >> size[i];
+
+        cout << "Enter block numbers: ";
+        for (j = 0; j < size[i]; j++) {
+            cin >> data[i][j];
+        }
+    }
+
+    // Output
+    cout << "\nFile\tIndex\tSize\tBlocks\n";
+    for (i = 0; i < files; i++) {
+        cout << i + 1 << "\t" << index[i] << "\t" << size[i] << "\t";
+        for (j = 0; j < size[i]; j++) {
+            cout << data[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+
+
+Output:
+Enter number of files: 1
+
+File 1:
+Enter index block: 4
+Enter number of blocks: 3
+Enter block numbers: 5 8 9
+
+File	Index	Size	Blocks
+1	    4	    3	    5 8 9
